@@ -102,3 +102,22 @@ function admin_log(
         ':ip'    => $_SERVER['REMOTE_ADDR'] ?? null,
     ]);
 }
+
+/**
+ * Format tanggal jadi teks relatif ("3 hari lalu", "2 minggu lalu", dst).
+ */
+function tanggal_relatif(?string $datetime): string
+{
+    if (!$datetime) return '';
+
+    $ts   = strtotime($datetime);
+    $now  = time();
+    $diff = $now - $ts;
+
+    if ($diff < 60)         return 'Baru saja';
+    if ($diff < 3600)       return floor($diff / 60)     . ' menit lalu';
+    if ($diff < 86400)      return floor($diff / 3600)   . ' jam lalu';
+    if ($diff < 2592000)    return floor($diff / 86400)  . ' hari lalu';
+    if ($diff < 31536000)   return floor($diff / 2592000) . ' bulan lalu';
+    return floor($diff / 31536000) . ' tahun lalu';
+}

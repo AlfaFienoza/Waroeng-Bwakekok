@@ -1,5 +1,5 @@
 /* ==========================================================
-   PENGENALAN MASAKAN PADANG
+   WAROENG BWAKEKOK — Beranda
    Gaya: majalah kuliner retro (krem, kunyit, daun pisang, sambal)
    ========================================================== */
 
@@ -208,25 +208,25 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding-block: 14px;
+  padding-block: 12px;
 }
 
+/* ---------- logo (foto) ---------- */
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  flex-shrink: 0;
+  line-height: 0;
 }
-.logo svg {
-  width: 34px;
-  color: var(--merah);
-}
-.logo b {
-  color: var(--merah);
+.logo img {
+  display: block;
+  height: 52px;
+  width: auto;
+  max-width: 260px;
+  object-fit: contain;
 }
 
+/* ---------- navigasi desktop ---------- */
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -250,9 +250,7 @@ h2 {
   transform-origin: left;
   transition: transform 0.22s;
 }
-.nav a:hover::after {
-  transform: scaleX(1);
-}
+.nav a:hover::after,
 .nav a.active::after {
   transform: scaleX(1);
 }
@@ -360,23 +358,22 @@ h2 {
 .sidebar-head .label {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--tinta);
+  flex-shrink: 1;
+  min-width: 0;
 }
-.sidebar-head .label svg {
-  width: 30px;
-  color: var(--merah);
-  flex-shrink: 0;
-}
-.sidebar-head .label b {
-  color: var(--merah);
+.sidebar-head .label img,
+.sidebar-head .label .logo-mini {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
 }
 
 .sidebar-close {
   width: 38px;
   height: 38px;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -992,57 +989,137 @@ h2 {
   color: var(--merah);
 }
 
-/* ---------- fakta ---------- */
-.fakta {
+/* ---------- review pelanggan ---------- */
+.review {
   padding-block: 96px 110px;
 }
 
-.fakta-grid {
+.review-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
 }
 
-.fakta-kartu {
+.review-card {
   position: relative;
   background: var(--putih);
   border: 1.5px solid var(--tinta);
   border-radius: 18px;
-  padding: 26px 24px 26px;
-  box-shadow: 6px 6px 0 rgba(235, 168, 60, 0.28);
-  transition: transform 0.2s;
+  padding: 26px 26px 22px;
+  box-shadow: 6px 6px 0 rgba(235, 168, 60, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
-.fakta-kartu:nth-child(1) {
-  background: #f3dcc9;
-}
-.fakta-kartu:nth-child(3) {
-  background: #eaefd8;
-}
-.fakta-kartu:hover {
-  transform: translateY(-6px);
+.review-card:hover {
+  transform: translateY(-5px) rotate(-0.4deg);
+  box-shadow: 9px 10px 0 rgba(235, 168, 60, 0.38);
 }
 
-.fakta-kartu .nomor {
+.review-card:nth-child(3n + 1) {
+  background: #f3dcc9;
+  box-shadow: 6px 6px 0 rgba(179, 58, 38, 0.18);
+}
+.review-card:nth-child(3n + 2) {
+  background: #fffcf5;
+  box-shadow: 6px 6px 0 rgba(31, 77, 43, 0.16);
+}
+.review-card:nth-child(3n + 3) {
+  background: #eaefd8;
+  box-shadow: 6px 6px 0 rgba(62, 124, 79, 0.22);
+}
+
+.review-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.review-avatar {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--tinta);
+  box-shadow: 3px 3px 0 var(--tinta);
+  background: var(--merah);
+  color: var(--krem);
+  font-family: "Fraunces", serif;
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+}
+.review-card:nth-child(3n + 2) .review-avatar {
+  background: var(--hijau);
+}
+.review-card:nth-child(3n + 3) .review-avatar {
+  background: var(--kuning);
+  color: var(--tinta);
+}
+
+.review-meta h4 {
+  font-family: "Fraunces", serif;
+  font-size: 17.5px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--tinta);
+}
+.review-loc {
   display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(43, 27, 16, 0.6);
+}
+
+.review-stars {
+  font-size: 16px;
+  letter-spacing: 3px;
+  color: var(--kuning);
+  text-shadow: 1px 1px 0 var(--tinta);
+  line-height: 1;
+}
+
+.review-text {
   font-family: "Fraunces", serif;
   font-style: italic;
-  font-weight: 800;
-  font-size: 44px;
-  line-height: 1;
-  color: var(--kuning);
-  -webkit-text-stroke: 1.5px var(--tinta);
-}
-.fakta-kartu h3 {
-  margin-top: 12px;
-  font-family: "Fraunces", serif;
-  font-size: 19px;
-  font-weight: 650;
-}
-.fakta-kartu p {
-  margin-top: 8px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.7;
-  color: rgba(43, 27, 16, 0.68);
+  color: rgba(43, 27, 16, 0.82);
+  flex-grow: 1;
+  position: relative;
+  padding-left: 18px;
+}
+.review-text::before {
+  content: "“";
+  position: absolute;
+  left: -2px;
+  top: -8px;
+  font-family: "Fraunces", serif;
+  font-style: normal;
+  font-size: 42px;
+  line-height: 1;
+  color: var(--merah);
+  opacity: 0.7;
+}
+
+.review-date {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(43, 27, 16, 0.08);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(43, 27, 16, 0.55);
 }
 
 /* ---------- footer ---------- */
@@ -1056,22 +1133,36 @@ h2 {
   text-align: center;
 }
 
-.gonjong-deret {
+/* ---------- deretan makanan di footer ---------- */
+.makanan-deret {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 16px;
-  color: rgba(235, 168, 60, 0.55);
+  gap: 22px;
+  flex-wrap: wrap;
+  color: rgba(235, 168, 60, 0.62);
 }
-.gonjong-deret svg {
+
+.makanan-deret svg {
   height: auto;
+  flex-shrink: 0;
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.3, 1),
+    color 0.3s,
+    filter 0.3s;
+}
+
+.makanan-deret svg:hover {
+  color: var(--kuning);
+  transform: translateY(-6px) rotate(-4deg);
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.2));
 }
 
 .wordmark {
   margin-top: 18px;
   font-family: "Fraunces", serif;
   font-weight: 900;
-  font-size: clamp(56px, 12vw, 140px);
+  font-size: clamp(46px, 10vw, 120px);
   line-height: 1;
   letter-spacing: 0.01em;
 }
@@ -1120,8 +1211,10 @@ h2 {
    ========================================================== */
 
 @media (max-width: 1080px) {
-  .menu-grid,
-  .fakta-grid {
+  .review-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .menu-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .rempah-grid {
@@ -1146,7 +1239,6 @@ h2 {
 
 /* ---------- hamburger aktif & perbaikan overflow tablet ---------- */
 @media (max-width: 880px) {
-  /* Navbar: sembunyikan nav, tampilkan hamburger */
   .nav {
     display: none;
   }
@@ -1158,7 +1250,11 @@ h2 {
     display: inline-flex;
   }
 
-  /* Hero: satu kolom, rata tengah */
+  .logo img {
+    height: 46px;
+    max-width: 220px;
+  }
+
   .hero {
     grid-template-columns: 1fr;
     text-align: center;
@@ -1177,7 +1273,6 @@ h2 {
     order: -1;
   }
 
-  /* Tentang: satu kolom */
   .tentang {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1191,7 +1286,6 @@ h2 {
     grid-template-columns: 1fr;
   }
 
-  /* Perbaikan overflow: cincin berputar */
   .cincin {
     inset: -26px;
     width: calc(100% + 52px);
@@ -1201,7 +1295,6 @@ h2 {
     inset: -10px;
   }
 
-  /* Perbaikan overflow: stiker */
   .stiker--satu {
     right: 2%;
   }
@@ -1211,8 +1304,19 @@ h2 {
 }
 
 @media (max-width: 620px) {
-  .menu-grid,
-  .fakta-grid {
+  .makanan-deret {
+    gap: 14px;
+  }
+  .makanan-deret svg {
+    max-height: 44px;
+  }
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+  .review {
+    padding-block: 70px 80px;
+  }
+  .menu-grid {
     grid-template-columns: 1fr;
   }
   .kartu:nth-child(even) {
@@ -1237,14 +1341,12 @@ h2 {
     padding: 8px 12px;
   }
 
-  /* Perbaikan overflow: cincin lebih kecil lagi */
   .cincin {
     inset: -18px;
     width: calc(100% + 36px);
     height: calc(100% + 36px);
   }
 
-  /* Perbaikan overflow: kolase & foto kecil */
   .kolase {
     padding: 10px 12px 36px;
   }
@@ -1254,9 +1356,19 @@ h2 {
     width: 40%;
   }
 
-  /* Beri sedikit ruang tepi supaya stiker tidak mentok */
   .hero-kanan {
     padding-inline: 8px;
+  }
+
+  /* logo lebih kecil lagi di HP */
+  .logo img {
+    height: 40px;
+    max-width: 190px;
+  }
+  .sidebar-head .label img,
+  .sidebar-head .label .logo-mini {
+    height: 36px;
+    max-width: 150px;
   }
 }
 

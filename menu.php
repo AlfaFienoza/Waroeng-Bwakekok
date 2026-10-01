@@ -2,26 +2,92 @@
 require_once __DIR__ . '/config/koneksi.php';
 require_once __DIR__ . '/config/helpers.php';
 
-// Ambil semua kategori
+// =========================================================
+// Konfigurasi pagination
+// =========================================================
+$per_page = 8;
+
+$page            = max(1, (int)($_GET['page'] ?? 1));
+$kategori_filter = trim((string)($_GET['kategori'] ?? 'all'));
+if ($kategori_filter === '') $kategori_filter = 'all';
+
+// Ambil daftar kategori (untuk chip filter)
 $kategori_list = $pdo->query("
     SELECT slug, nama FROM kategori ORDER BY urutan ASC, nama ASC
 ")->fetchAll();
 
-// Ambil semua produk + nama kategori
-$produk_list = $pdo->query("
+// =========================================================
+// Query produk + filter kategori + pagination
+// =========================================================
+$where  = '';
+$params = [];
+
+if ($kategori_filter !== 'all') {
+    $where = " WHERE k.slug = :kat ";
+    $params[':kat'] = $kategori_filter;
+}
+
+// Hitung total produk
+$stmtCount = $pdo->prepare("
+    SELECT COUNT(*)
+    FROM produk p
+    LEFT JOIN kategori k ON k.id = p.kategori_id
+    $where
+");
+$stmtCount->execute($params);
+$total_produk = (int)$stmtCount->fetchColumn();
+
+// Hitung total halaman
+$total_pages = max(1, (int)ceil($total_produk / $per_page));
+
+// Pastikan $page tidak melebihi total halaman
+if ($page > $total_pages) $page = $total_pages;
+
+$offset = ($page - 1) * $per_page;
+
+// Ambil produk untuk halaman ini
+$stmt = $pdo->prepare("
     SELECT p.id, p.nama, p.slug, p.deskripsi_singkat, p.harga, p.harga_asli,
            p.gambar_utama, k.slug AS kategori_slug, k.nama AS kategori_nama
     FROM produk p
     LEFT JOIN kategori k ON k.id = p.kategori_id
-    ORDER BY p.id ASC
-")->fetchAll();
+    $where
+    ORDER BY p.is_unggulan DESC, p.id ASC
+    LIMIT $per_page OFFSET $offset
+");
+$stmt->execute($params);
+$produk_list = $stmt->fetchAll();
+
+// Nomor urut awal
+$no_awal = $offset + 1;
+
+// Cari nama kategori yang aktif (untuk judul)
+$judul_aktif = 'All Menu';
+foreach ($kategori_list as $k) {
+    if ($k['slug'] === $kategori_filter) {
+        $judul_aktif = $k['nama'];
+        break;
+    }
+}
+
+// =========================================================
+// Helper URL (mempertahankan filter kategori & page)
+// =========================================================
+function url_menu(int $page = 1, string $kategori = 'all'): string
+{
+    $q = [];
+    if ($kategori !== '' && $kategori !== 'all') $q['kategori'] = $kategori;
+    if ($page > 1) $q['page'] = $page;
+    $qs = http_build_query($q);
+    return 'menu.php' . ($qs ? '?' . $qs : '');
+}
 ?>
 <!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menu Nasi Padang</title>
+    <title>Menu — Waroeng Bwakekok</title>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -34,26 +100,21 @@ $produk_list = $pdo->query("
   </head>
   <body>
     <section class="website">
+
       <!-- ===== NAVBAR ===== -->
       <nav class="navbar">
-        <div class="logo">Masakan <strong>Padang</strong></div>
-
+        <a class="logo" href="beranda.php" aria-label="Waroeng Bwakekok">
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" />
+        </a>
         <div class="nav-menu">
           <a href="beranda.php">Home</a>
           <a href="menu.php" class="active">Menu</a>
-          <a href="#">Review</a>
+          <a href="beranda.php#review">Review</a>
         </div>
-
         <div class="nav-right">
-          <button
-            class="hamburger"
-            aria-label="Buka menu"
-            aria-expanded="false"
-            aria-controls="sidebar"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
+          <button class="hamburger" aria-label="Buka menu"
+                  aria-expanded="false" aria-controls="sidebar">
+            <span></span><span></span><span></span>
           </button>
         </div>
       </nav>
@@ -63,37 +124,28 @@ $produk_list = $pdo->query("
         <h1>Nasi Padang Menu</h1>
 
         <div class="categories">
-          <a href="#" class="category-active" data-filter="all">All Menu</a>
-          <a href="#" data-filter="ayam">Ayam</a>
-          <a href="#" data-filter="ikan">Ikan</a>
-          <a href="#" data-filter="daging">Daging</a>
-          <a href="#" data-filter="telur">Telur</a>
-          <a href="#" data-filter="sayuran">Sayuran</a>
-          <a href="#" data-filter="sambal">Sambal</a>
+          <a href="<?= e(url_menu(1, 'all')) ?>"
+             class="<?= $kategori_filter === 'all' ? 'category-active' : '' ?>">
+            All Menu
+          </a>
+          <?php foreach ($kategori_list as $k): ?>
+            <a href="<?= e(url_menu(1, $k['slug'])) ?>"
+               class="<?= $kategori_filter === $k['slug'] ? 'category-active' : '' ?>">
+              <?= e($k['nama']) ?>
+            </a>
+          <?php endforeach; ?>
         </div>
 
         <div class="hiasan" aria-hidden="true">
           <svg class="leaf" viewBox="0 0 48 32">
-            <path
-              d="M2 22C6 8 20 2 46 4 44 22 30 32 12 28L2 30l6-8z"
-              fill="#3E7C4F"
-            />
-            <path
-              d="M8 24C18 16 28 11 40 8"
-              stroke="#EBA83C"
-              stroke-width="2.5"
-              fill="none"
-              stroke-linecap="round"
-            />
+            <path d="M2 22C6 8 20 2 46 4 44 22 30 32 12 28L2 30l6-8z" fill="#3E7C4F" />
+            <path d="M8 24C18 16 28 11 40 8"
+                  stroke="#EBA83C" stroke-width="2.5"
+                  fill="none" stroke-linecap="round" />
           </svg>
           <span class="chili">🌶️</span>
           <svg class="sprout" viewBox="0 0 40 44">
-            <path
-              d="M20 42V22"
-              stroke="#3E7C4F"
-              stroke-width="4"
-              stroke-linecap="round"
-            />
+            <path d="M20 42V22" stroke="#3E7C4F" stroke-width="4" stroke-linecap="round" />
             <path d="M20 24C8 26 2 16 2 6c12 0 18 6 18 18z" fill="#3E7C4F" />
             <path d="M20 20C20 8 28 2 38 2c0 10-6 18-18 18z" fill="#3E7C4F" />
           </svg>
@@ -102,8 +154,7 @@ $produk_list = $pdo->query("
 
       <!-- ===== JUDUL ===== -->
       <div class="menu-title">
-        <h2 id="menuTitle">All Menu</h2>
-
+        <h2><?= e($judul_aktif) ?></h2>
         <div class="sort">
           Sort by:
           <select>
@@ -116,318 +167,123 @@ $produk_list = $pdo->query("
 
       <!-- ===== DAFTAR MENU ===== -->
       <section class="food-container" id="foodContainer">
-        <!-- CARD 1 - IKAN -->
-        <div class="food-card" data-category="ikan">
-          <img src="ikangoreng.jpg" alt="Ikan Goreng" />
-          <div class="food-info">
-            <h3>Ikan Goreng</h3>
-            <p>Ikan goreng renyah</p>
-            <div class="harga">Rp25.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
+        <?php if (empty($produk_list)): ?>
+          <p style="grid-column:1/-1;text-align:center;color:#8A7663;font-style:italic;padding:40px 0;">
+            Belum ada menu untuk kategori ini.
+          </p>
+        <?php else: ?>
+          <?php foreach ($produk_list as $p): ?>
+            <div class="food-card" data-category="<?= e($p['kategori_slug'] ?? '') ?>">
+              <img src="<?= e(gambar_produk($p['gambar_utama'])) ?>"
+                   alt="<?= e($p['nama']) ?>" loading="lazy" />
+              <div class="food-info">
+                <h3><?= e($p['nama']) ?></h3>
+                <p><?= e($p['deskripsi_singkat']) ?></p>
 
-        <!-- CARD 2 - AYAM -->
-        <div class="food-card" data-category="ayam">
-          <img src="ayamgoreng.jpg" alt="Ayam Goreng" />
-          <div class="food-info">
-            <h3>Ayam Goreng</h3>
-            <p>Ayam goreng gurih</p>
-            <div class="harga">Rp20.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
+                <div class="harga">
+                  <?= rupiah($p['harga']) ?>
+                  <?php if (!empty($p['harga_asli']) && $p['harga_asli'] > $p['harga']): ?>
+                    <s><?= rupiah($p['harga_asli']) ?></s>
+                  <?php endif; ?>
+                </div>
 
-        <!-- CARD 3 - AYAM -->
-        <div class="food-card" data-category="ayam">
-          <img src="ayambakar.jpg" alt="Ayam Bakar" />
-          <div class="food-info">
-            <h3>Ayam Bakar</h3>
-            <p>Ayam bakar pedas</p>
-            <div class="harga">Rp22.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
+                <div class="card-bottom">
+                  <a href="<?= e(url_detail($p['slug'])) ?>" class="btn-detail">
+                    Lihat Detail <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                  <button class="love" aria-label="Simpan ke favorit">
+                    <i class="fa-regular fa-heart"></i>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <!-- CARD 4 - DAGING -->
-        <div class="food-card" data-category="daging">
-          <img src="rendang.jpg" alt="Rendang" />
-          <div class="food-info">
-            <h3>Rendang</h3>
-            <p>Rendang pedas gurih</p>
-            <div class="harga">Rp25.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 5 - AYAM -->
-        <div class="food-card" data-category="ayam">
-          <img src="ayamgulai.jpg" alt="Ayam Gulai" />
-          <div class="food-info">
-            <h3>Ayam Gulai</h3>
-            <p>Ayam dengan kuah gulai khas Minang</p>
-            <div class="harga">Rp23.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 6 - IKAN -->
-        <div class="food-card" data-category="ikan">
-          <img src="ikangulai.jpg" alt="Ikan Gulai" />
-          <div class="food-info">
-            <h3>Ikan Gulai</h3>
-            <p>Ikan dengan kuah gulai khas Minang</p>
-            <div class="harga">Rp26.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 7 - TELUR -->
-        <div class="food-card" data-category="telur">
-          <img src="telur.jpg" alt="Telur Sambal" />
-          <div class="food-info">
-            <h3>Telur Sambal</h3>
-            <p>Telur rebus dengan sambal pedas jeletot</p>
-            <div class="harga">Rp10.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 8 - IKAN -->
-        <div class="food-card" data-category="ikan">
-          <img src="cumi.jpg" alt="Cumi Goreng" />
-          <div class="food-info">
-            <h3>Cumi Goreng</h3>
-            <p>Cumi goreng dengan sambal hijau pedas</p>
-            <div class="harga">Rp28.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 9 - SAYURAN -->
-        <div class="food-card" data-category="sayuran">
-          <img src="Gulai-daun-singkong.jpeg" alt="Sayur Daun Singkong" />
-          <div class="food-info">
-            <h3>Sayur Daun Singkong</h3>
-            <p>Sayur daun singkong dengan kuah kuning</p>
-            <div class="harga">Rp8.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 10 - SAYURAN -->
-        <div class="food-card" data-category="sayuran">
-          <img src="sayurnangkaa.jpg" alt="Sayur Nangka" />
-          <div class="food-info">
-            <h3>Sayur Nangka</h3>
-            <p>Sayur nangka kuah gurih</p>
-            <div class="harga">Rp8.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 11 - SAYURAN -->
-        <div class="food-card" data-category="sayuran">
-          <img src="perkedel.jpg" alt="Perkedel" />
-          <div class="food-info">
-            <h3>Perkedel</h3>
-            <p>Perkedel gurih mantap</p>
-            <div class="harga">Rp5.000</div>
-            <div class="card-bottom">
-              <button class="btn-detail">
-                Lihat Detail <i class="fa-solid fa-arrow-right"></i>
-              </button>
-              <span class="love" role="button" aria-label="Simpan ke favorit"
-                ><i class="fa-regular fa-heart"></i
-              ></span>
-            </div>
-          </div>
-        </div>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </section>
 
-      <!-- ===== PAGINATION ===== -->
+      <!-- ===== PAGINATION (selalu tampil) ===== -->
       <div class="pagination">
-        <button aria-label="Sebelumnya">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <span class="page page-active">1</span>
-        <span class="page">2</span>
-        <span class="page">3</span>
-        <button aria-label="Berikutnya">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
+        <?php if ($page > 1): ?>
+          <a href="<?= e(url_menu($page - 1, $kategori_filter)) ?>"
+             class="page-btn" aria-label="Sebelumnya">
+            <i class="fa-solid fa-chevron-left"></i>
+          </a>
+        <?php else: ?>
+          <span class="page-btn page-btn--disabled" aria-disabled="true">
+            <i class="fa-solid fa-chevron-left"></i>
+          </span>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+          <?php if ($i === $page): ?>
+            <span class="page page-active"><?= $i ?></span>
+          <?php else: ?>
+            <a href="<?= e(url_menu($i, $kategori_filter)) ?>" class="page">
+              <?= $i ?>
+            </a>
+          <?php endif; ?>
+        <?php endfor; ?>
+
+        <?php if ($page < $total_pages): ?>
+          <a href="<?= e(url_menu($page + 1, $kategori_filter)) ?>"
+             class="page-btn" aria-label="Berikutnya">
+            <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        <?php else: ?>
+          <span class="page-btn page-btn--disabled" aria-disabled="true">
+            <i class="fa-solid fa-chevron-right"></i>
+          </span>
+        <?php endif; ?>
       </div>
+
+      <p class="pagination-info">
+        Menampilkan <strong><?= $no_awal ?></strong>–<strong><?= min($no_awal + $per_page - 1, $total_produk) ?></strong>
+        dari <strong><?= $total_produk ?></strong> produk
+      </p>
 
       <!-- ===== FOOTER ===== -->
       <footer>
-        <div class="footer-logo">masakanpadang</div>
-
+        <a href="beranda.php" class="footer-logo" aria-label="Waroeng Bwakekok">
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" />
+        </a>
         <div class="copyright">
-          <p>Masakan Padang dengan cita rasa terbaik.</p>
-          <small>&copy; 2026 masakanpadang. All rights reserved.</small>
+          <p>Waroeng Bwakekok — makan enak, gak pakai ribet.</p>
+          <small>&copy; <?= date('Y') ?> Waroeng Bwakekok. All rights reserved.</small>
         </div>
-
         <div class="sosial">
-          <a href="#" aria-label="Instagram"
-            ><i class="fab fa-instagram"></i
-          ></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
           <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
           <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
         </div>
       </footer>
     </section>
 
-    <!-- ===== SIDEBAR (mobile) ===== -->
+    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
     <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
       <div class="sidebar-head">
-        <span class="label">Masakan <strong>Padang</strong></span>
+        <span class="label">
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" />
+        </span>
         <button class="sidebar-close" aria-label="Tutup menu">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <a href="beranda.html">Home</a>
-      <a href="menu.html" class="active">Menu</a>
-      <a href="#">Review</a>
+      <a href="beranda.php">Home</a>
+      <a href="menu.php" class="active">Menu</a>
+      <a href="beranda.php#review">Review</a>
     </aside>
 
     <script>
-      // ===== Toggle ikon hati (favorit) =====
-      document.querySelectorAll(".love").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          var icon = btn.querySelector("i");
+      // ===== Toggle love =====
+      document.querySelectorAll(".love").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const icon = btn.querySelector("i");
           btn.classList.toggle("liked");
           icon.classList.toggle("fa-regular");
           icon.classList.toggle("fa-solid");
         });
       });
-
-      // ===== Filter kategori =====
-      const categoryLinks = document.querySelectorAll(".categories a");
-      const cards = document.querySelectorAll(".food-card");
-      const menuTitle = document.getElementById("menuTitle");
-      const foodContainer = document.getElementById("foodContainer");
-
-      categoryLinks.forEach(function (link) {
-        link.addEventListener("click", function (e) {
-          e.preventDefault();
-
-          categoryLinks.forEach(function (l) {
-            l.classList.remove("category-active");
-          });
-          link.classList.add("category-active");
-
-          const filter = link.dataset.filter;
-          const label = link.textContent.trim();
-
-          if (menuTitle) {
-            menuTitle.textContent = filter === "all" ? "All Menu" : label;
-          }
-
-          let visibleCount = 0;
-          cards.forEach(function (card) {
-            const match = filter === "all" || card.dataset.category === filter;
-            if (match) {
-              card.style.display = "";
-              visibleCount++;
-            } else {
-              card.style.display = "none";
-            }
-          });
-
-          showEmptyMessage(visibleCount);
-        });
-      });
-
-      function showEmptyMessage(count) {
-        let empty = document.getElementById("emptyMessage");
-        if (count === 0) {
-          if (!empty) {
-            empty = document.createElement("p");
-            empty.id = "emptyMessage";
-            empty.textContent = "Belum ada menu untuk kategori ini.";
-            empty.style.textAlign = "center";
-            empty.style.color = "#8A7663";
-            empty.style.fontSize = "16px";
-            empty.style.padding = "40px 0";
-            empty.style.gridColumn = "1 / -1";
-            foodContainer.appendChild(empty);
-          }
-          empty.style.display = "block";
-        } else if (empty) {
-          empty.style.display = "none";
-        }
-      }
 
       // ===== Hamburger & Sidebar =====
       const hamburger = document.querySelector(".hamburger");
@@ -442,7 +298,6 @@ $produk_list = $pdo->query("
         hamburger.setAttribute("aria-expanded", "true");
         document.body.style.overflow = "hidden";
       }
-
       function closeSidebar() {
         sidebar.classList.remove("active");
         sidebarOverlay.classList.remove("active");
@@ -450,22 +305,12 @@ $produk_list = $pdo->query("
         hamburger.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "";
       }
-
-      hamburger.addEventListener("click", function () {
-        if (sidebar.classList.contains("active")) {
-          closeSidebar();
-        } else {
-          openSidebar();
-        }
-      });
-
+      hamburger.addEventListener("click", () =>
+        sidebar.classList.contains("active") ? closeSidebar() : openSidebar());
       sidebarOverlay.addEventListener("click", closeSidebar);
       sidebarClose.addEventListener("click", closeSidebar);
-
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && sidebar.classList.contains("active")) {
-          closeSidebar();
-        }
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && sidebar.classList.contains("active")) closeSidebar();
       });
     </script>
   </body>

@@ -20,7 +20,6 @@ $stmt = $pdo->prepare("
 $stmt->execute([':slug' => $slug]);
 $produk = $stmt->fetch();
 
-// Kalau produk tidak ditemukan → balik ke menu
 if (!$produk) {
     header('Location: menu.php');
     exit;
@@ -35,12 +34,11 @@ $stmtG = $pdo->prepare("
 $stmtG->execute([':pid' => $produk['id']]);
 $galeri = $stmtG->fetchAll(PDO::FETCH_COLUMN);
 
-// Kalau tidak ada galeri, pakai gambar utama sebagai satu-satunya gambar
 if (empty($galeri)) {
     $galeri = [$produk['gambar_utama']];
 }
 
-// ---------- Ambil produk serupa (kategori sama, exclude diri sendiri) ----------
+// ---------- Ambil produk serupa ----------
 $stmtR = $pdo->prepare("
     SELECT p.nama, p.slug, p.deskripsi_singkat, p.gambar_utama
     FROM produk p
@@ -61,11 +59,15 @@ $gambar_utama_url = gambar_produk($galeri[0]);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?= e($produk['nama']) ?> - Masakan Padang</title>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title><?= e($produk['nama']) ?> — Waroeng Bwakekok</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link rel="stylesheet" href="assets/css/detail-produk.css" />
   </head>
   <body>
@@ -73,11 +75,13 @@ $gambar_utama_url = gambar_produk($galeri[0]);
 
       <!-- ===== NAVBAR ===== -->
       <header class="navbar">
-        <div class="logo">Masakan <strong>Padang</strong></div>
+        <a class="logo" href="beranda.php" aria-label="Waroeng Bwakekok">
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" />
+        </a>
         <nav class="nav-links">
           <a href="beranda.php">Home</a>
           <a href="menu.php">Menu</a>
-          <a href="#">Review</a>
+          <a href="beranda.php#review">Review</a>
         </nav>
         <div class="nav-right">
           <button class="hamburger" aria-label="Buka menu"
@@ -90,12 +94,14 @@ $gambar_utama_url = gambar_produk($galeri[0]);
       <!-- ===== DETAIL ===== -->
       <section id="detail" class="detail-section">
         <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="menu.php">Home</a>
+          <a href="beranda.php">Home</a>
           <i class="fa-solid fa-chevron-right"></i>
           <a href="menu.php">Menu</a>
           <i class="fa-solid fa-chevron-right"></i>
           <?php if (!empty($produk['kategori_nama'])): ?>
-            <a href="menu.php"><?= e($produk['kategori_nama']) ?></a>
+            <a href="menu.php?kategori=<?= e($produk['kategori_slug']) ?>">
+              <?= e($produk['kategori_nama']) ?>
+            </a>
             <i class="fa-solid fa-chevron-right"></i>
           <?php endif; ?>
           <span class="current"><?= e($produk['nama']) ?></span>
@@ -203,10 +209,16 @@ $gambar_utama_url = gambar_produk($galeri[0]);
 
       <!-- ===== FOOTER ===== -->
       <footer id="kontak" class="footer">
-        <div class="footer-left"><h3>Masakan Padang</h3></div>
+        <div class="footer-left">
+          <a href="beranda.php" aria-label="Waroeng Bwakekok">
+            <img src="assets/img/logo.png"
+                 alt="Waroeng Bwakekok"
+                 class="footer-logo-img" />
+          </a>
+        </div>
         <div class="footer-center">
-          <p>Authentic Padang Cuisine, made with love.</p>
-          <p class="copyright">&copy; <?= date('Y') ?> Masakan Padang. All rights reserved.</p>
+          <p>Waroeng Bwakekok — makan enak, gak pakai ribet.</p>
+          <p class="copyright">&copy; <?= date('Y') ?> Waroeng Bwakekok. All rights reserved.</p>
         </div>
         <div class="footer-right">
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -220,14 +232,16 @@ $gambar_utama_url = gambar_produk($galeri[0]);
     <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
     <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
       <div class="sidebar-head">
-        <span class="label">Masakan <strong>Padang</strong></span>
+        <span class="label">
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" />
+        </span>
         <button class="sidebar-close" aria-label="Tutup menu">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <a href="beranda.php">Home</a>
       <a href="menu.php">Menu</a>
-      <a href="#">Review</a>
+      <a href="beranda.php#review">Review</a>
     </aside>
 
     <script>
@@ -254,7 +268,7 @@ $gambar_utama_url = gambar_produk($galeri[0]);
         });
       }
 
-      // ===== Hamburger =====
+      // ===== Hamburger & Sidebar =====
       const hamburger = document.querySelector(".hamburger");
       const sidebar = document.getElementById("sidebar");
       const sidebarOverlay = document.getElementById("sidebarOverlay");

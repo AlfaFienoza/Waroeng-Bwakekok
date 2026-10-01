@@ -12,6 +12,15 @@ $stmt = $pdo->query("
     LIMIT 8
 ");
 $produk_unggulan = $stmt->fetchAll();
+
+// Ambil 6 review pelanggan terbaru
+$review_list = $pdo->query("
+    SELECT nama, kota, rating, pesan, dibuat_pada
+    FROM review
+    WHERE is_tampil = 1
+    ORDER BY dibuat_pada DESC
+    LIMIT 6
+")->fetchAll();
 ?>
 
 <!doctype html>
@@ -19,7 +28,7 @@ $produk_unggulan = $stmt->fetchAll();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mengenal Masakan Padang</title>
+    <title>Waroeng Bwakekok — Makan Enak Gak Pakai Ribet</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,29 +47,25 @@ $produk_unggulan = $stmt->fetchAll();
           <span>Rendang</span><i>✦</i><span>Gulai</span><i>✦</i>
           <span>Sate Padang</span><i>✦</i><span>Dendeng Balado</span><i>✦</i>
           <span>Sayur Nangka</span><i>✦</i><span>Sambal Lado Mudo</span><i>✦</i>
-          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span
-          ><i>✦</i>
+          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span><i>✦</i>
         </span>
         <span class="seq">
           <span>Rendang</span><i>✦</i><span>Gulai</span><i>✦</i>
           <span>Sate Padang</span><i>✦</i><span>Dendeng Balado</span><i>✦</i>
           <span>Sayur Nangka</span><i>✦</i><span>Sambal Lado Mudo</span><i>✦</i>
-          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span
-          ><i>✦</i>
+          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span><i>✦</i>
         </span>
         <span class="seq">
           <span>Rendang</span><i>✦</i><span>Gulai</span><i>✦</i>
           <span>Sate Padang</span><i>✦</i><span>Dendeng Balado</span><i>✦</i>
           <span>Sayur Nangka</span><i>✦</i><span>Sambal Lado Mudo</span><i>✦</i>
-          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span
-          ><i>✦</i>
+          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span><i>✦</i>
         </span>
         <span class="seq">
           <span>Rendang</span><i>✦</i><span>Gulai</span><i>✦</i>
           <span>Sate Padang</span><i>✦</i><span>Dendeng Balado</span><i>✦</i>
           <span>Sayur Nangka</span><i>✦</i><span>Sambal Lado Mudo</span><i>✦</i>
-          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span
-          ><i>✦</i>
+          <span>Telur Balado</span><i>✦</i><span>Gulai Kepala Kakap</span><i>✦</i>
         </span>
       </div>
     </div>
@@ -68,22 +73,14 @@ $produk_unggulan = $stmt->fetchAll();
     <!-- ===== HEADER ===== -->
     <header class="header">
       <div class="container header-dalam">
-        <a class="logo" href="beranda.html">
-          <svg viewBox="0 0 48 36" fill="currentColor" aria-hidden="true">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-          <span>Masakan<b>Padang</b></span>
+        <a class="logo" href="beranda.php">
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" />
         </a>
 
         <nav class="nav">
           <a href="beranda.php" class="active">Home</a>
           <a href="menu.php">Menu</a>
-          <a href="#">Review</a>
+          <a href="#review">Review</a>
         </nav>
 
         <div class="nav-right">
@@ -105,25 +102,22 @@ $produk_unggulan = $stmt->fetchAll();
     <section class="hero container">
       <div class="hero-kiri">
         <p class="eyebrow naik" style="--d: 0.05s">
-          ✦ Mengenal Kuliner Nusantara ✦
+          ✦ SELAMAT DATANG DI WAROENG BWAKEKOK ✦
         </p>
         <h1 class="naik" style="--d: 0.12s">
-          Raso nan Lamak<br />
-          dari <em>Ranah Minang</em>
+          MAKAN ENAK <br />
+          GAK <em>PAKAI RIBET</em>
         </h1>
         <p class="hero-desk naik" style="--d: 0.2s">
-          Ini bukan etalase — ini perkenalan. Kenali rendang yang menunggu
-          delapan jam di atas api kecil, gulai yang berpadu dengan santan, dan
-          rempah-rempah yang tumbuh subur di tanah Minangkabau.
+          Dari rendang yang kaya rempah sampai sambal yang bikin nambah nasi. Temukan berbagai hidangan favorit dalam satu tempat.
         </p>
         <div class="hero-aksi naik" style="--d: 0.28s">
-          <a href="#tentang" class="btn btn--merah">Mulai Mengenal</a>
-          <a href="#hidangan" class="btn btn--garis">Langsung ke Hidangan</a>
+          <a href="#tentang" class="btn btn--merah">Tentang Kami</a>
+          <a href="#hidangan" class="btn btn--garis">Jelajahi Hidangan</a>
         </div>
         <ul class="hero-stat naik" style="--d: 0.36s">
-          <li><b>8 jam</b><span>rendang di atas api kecil</span></li>
-          <li><b>#1</b><span>CNN makanan terenak dunia, 2×</span></li>
-          <li><b>30+</b><span>jenis lauk khas Minang</span></li>
+          <li><b>8+ </b><span>Pilihan Menu</span></li>
+          <li><b>10+</b><span>Sambal & Pelengkap</span></li>
         </ul>
       </div>
 
@@ -142,7 +136,7 @@ $produk_unggulan = $stmt->fetchAll();
                 textLength="527"
                 lengthAdjust="spacingAndGlyphs"
               >
-                REMPAH ✦ SANTAN ✦ KESABARAN ✦ RASO NAN LAMAK ✦
+                WAROENG BWAKEKOK ✦ MAKAN ENAK ✦ PILIH LAUK ✦ TAMBAH NASI ✦
               </textPath>
             </text>
           </svg>
@@ -179,54 +173,37 @@ $produk_unggulan = $stmt->fetchAll();
 
       <div class="tentang-teks reveal">
         <p class="eyebrow">✦ Sekilas ✦</p>
-        <h2>Masakan Padang itu<br /><em>apa, sebenarnya?</em></h2>
+        <h2>Tentang<br /><em>Waroeng Bwakekok</em></h2>
         <p>
-          Masakan Padang — atau <em>masakan Minang</em> — adalah tradisi memasak
-          dari dataran tinggi Minangkabau, Sumatera Barat. Ciri khasnya: kuah
-          santan yang kental, rasa pedas yang berani, dan bumbu yang digiling
-          dari belasan jenis rempah segar.
-        </p>
-        <p>
-          Masakannya tak mengenal kata tergesa. Daging direndang berjam-jam di
-          atas api kecil sampai bumbu meresap ke serat. Dari dapur inilah lahir
-          rendang, gulai, dan belasan hidangan yang kini dikenal di seluruh
-          nusantara — berkat roda perantau urang Minang.
+Waroeng Bwakekok hadir untuk menyajikan berbagai hidangan favorit dengan tampilan yang sederhana, pilihan yang beragam, dan rasa yang bikin ingin kembali lagi.
+Mulai dari rendang, ayam pop, telur balado, gulai, hingga sambal pelengkap — semuanya bisa kamu temukan dalam satu katalog.
         </p>
       </div>
 
       <div class="pilar-grid">
         <div class="pilar reveal">
           <span class="emoji">🥥</span>
-          <h3>Santan</h3>
-          <p>
-            Santan kental dari kelapa muda menjadi dasar hampir semua kuah —
-            diaduk pelan-pelan agar tak pecah.
-          </p>
+          <h3>Banyak Pilihan</h3>
+          <p>Beragam lauk untuk menemani sepiring nasi hangat.</p>
         </div>
         <div class="pilar reveal">
           <span class="emoji">🌶️</span>
-          <h3>Rempah &amp; Lado</h3>
-          <p>
-            Cabai, lengkuas, kunyit, serai — digiling di batu samek, wajib
-            segar, bukan bubuk instan.
-          </p>
+          <h3>Rasa Nendang</h3>
+          <p>Dari gurih, pedas, sampai kaya rempah.</p>
         </div>
         <div class="pilar reveal">
           <span class="emoji">⏳</span>
-          <h3>Kesabaran</h3>
-          <p>
-            Api kecil dan waktu panjang. Di sinilah rasa "nempel sampai ke
-            serat" itu berasal.
-          </p>
+          <h3>Bikin Balik</h3>
+          <p>Sekali coba, siapa tahu jadi menu favoritmu.</p>
         </div>
       </div>
     </section>
 
     <!-- ===== HIDANGAN IKONIK ===== -->
-        <section class="hidangan container" id="hidangan">
+    <section class="hidangan container" id="hidangan">
       <div class="kepala reveal">
         <p class="eyebrow">✦ Hidangan Ikonik ✦</p>
-        <h2>Berteman dengan <em>Lauk-Lauknya</em></h2>
+        <h2>Pilihan Yang <em>Bikin Ngiler</em></h2>
         <p class="sub">
           Delapan hidangan yang paling sering menyapa meja makan.
         </p>
@@ -279,48 +256,43 @@ $produk_unggulan = $stmt->fetchAll();
     <section class="rendang" id="rendang">
       <div class="container">
         <div class="kepala kepala--terang reveal">
-          <p class="eyebrow">✦ Sang Raja ✦</p>
-          <h2>Perjalanan Panjang <em>Rendang</em></h2>
+          <p class="eyebrow">✦ Menu Favorit ✦</p>
+          <h2>Menu Favorit <em>Minggu Ini</em></h2>
           <p class="sub">
-            Sebelum bernama rendang, sepotong daging itu berhenti di tiga
-            perhentian.
+            Tiga hidangan yang siap bikin nasi di piring terasa kurang.
           </p>
         </div>
 
         <div class="timeline">
           <div class="tahap reveal">
             <span class="bola">1</span>
-            <h3>Gulai</h3>
+            <h3>Rendang</h3>
             <p>
-              Santan dan air berpadu menjadi kuah kuning bening. Daging mulai
-              menyerap rempah, teksturnya mulai lunak.
+              Daging empuk dengan bumbu rempah yang kaya dan rasa gurih yang meresap sampai ke dalam.
             </p>
-            <span class="waktu">± 1–2 jam</span>
+            <span class="waktu">Rp 25.000</span>
           </div>
           <div class="tahap reveal">
             <span class="bola">2</span>
-            <h3>Kalio</h3>
+            <h3>Dendeng Balado</h3>
             <p>
-              Kuah menyusut dan mengental keemasan. Rasa makin pekat — di banyak
-              daerah, kalio inilah "rendang basah".
+              Irisan daging tipis yang gurih dipadukan dengan sambal balado pedas yang bikin susah berhenti.
             </p>
-            <span class="waktu">± 3–4 jam</span>
+            <span class="waktu">Rp 22.000</span>
           </div>
           <div class="tahap reveal">
             <span class="bola">3</span>
-            <h3>Rendang</h3>
+            <h3>Gulai Ayam</h3>
             <p>
-              Kuah mengering total. Warna berubah cokelat gelap mengkilap, rasa
-              menempel sampai ke serat — dan tahan berminggu-minggu.
+              Ayam lembut dengan kuah santan gurih dan rempah yang harum. Cocok buat teman nasi hangat.
             </p>
-            <span class="waktu">± 6–8 jam</span>
+            <span class="waktu">Rp 25.000</span>
           </div>
         </div>
 
         <div class="cnn reveal">
           <span class="cnn-lencana"
-            >✦ CNN World's 50 Best Foods — peringkat #1 versi pembaca, 2011
-            &amp; 2017 ✦</span
+            >✦ Paling Sering Dipilih Di Waroeng Bwakekok ✦</span
           >
         </div>
       </div>
@@ -344,65 +316,63 @@ $produk_unggulan = $stmt->fetchAll();
     <!-- ===== REMPAH ===== -->
     <section class="rempah container" id="rempah">
       <div class="kepala reveal">
-        <p class="eyebrow">✦ Jiwa Dapur Minang ✦</p>
-        <h2>Sepuluh Sahabat <em>Batu Samek</em></h2>
+        <p class="eyebrow">✦ RAHASIA DI BALIK RASA ✦</p>
+        <h2>Bahan Yang Bikin <em>Rasa Nendang</em></h2>
         <p class="sub">
-          Bumbu segar yang digiling sendiri — fondasi seluruh rasa.
+          Dari rempah aromatik sampai bahan pelengkap, setiap bahan punya perannya sendiri dalam menghasilkan rasa yang khas.
         </p>
       </div>
 
       <div class="rempah-grid">
         <div class="bumbu reveal">
           <span class="emoji">🌶️</span>
-          <h3>Lado</h3>
-          <p>
-            Cabai — jiwa kepedasan; merah untuk balado, hijau untuk lado mudo.
-          </p>
+          <h3>Cabai</h3>
+          <p>Memberikan rasa pedas sekaligus warna dan karakter pada berbagai hidangan.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🥥</span>
           <h3>Santan</h3>
-          <p>Dari kelapa tua parut; dasar krim hampir semua kuah gulai.</p>
+          <p>Memberikan rasa gurih dan tekstur creamy pada hidangan berkuah.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🫚</span>
           <h3>Kunyit</h3>
-          <p>Pemberi warna kuning keemasan yang jadi tanda tangan gulai.</p>
+          <p>Memberikan warna kuning alami serta aroma khas pada masakan.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🌿</span>
-          <h3>Sereh</h3>
-          <p>Serai — wanginya menyatu di hampir setiap hidangan berkuah.</p>
+          <h3>Serai</h3>
+          <p>Memberikan aroma segar dan wangi yang membuat masakan semakin harum.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🧅</span>
           <h3>Bawang</h3>
-          <p>Merah dan putih, selalu digiling bersama sebagai dasar bumbu.</p>
+          <p>Menjadi salah satu dasar bumbu untuk membangun rasa gurih dan aromatik.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🫚</span>
-          <h3>Langkueh</h3>
-          <p>Lengkuas — aroma segar-pedas hangat pada kuah dan rendang.</p>
+          <h3>Lengkuas</h3>
+          <p>Memberikan aroma hangat dan rasa khas pada masakan berbumbu.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🍃</span>
-          <h3>Ruku-Ruku</h3>
-          <p>Kemangi Minang; disentuhkan di akhir masakan untuk wangi segar.</p>
+          <h3>Daun Kemangi</h3>
+          <p>Menambahkan aroma segar yang melengkapi rasa dari bumbu utama.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🍋</span>
-          <h3>Asam Kandis</h3>
-          <p>Pemberi rasa asam-gurih khas pada gulai ikan dan pindang.</p>
+          <h3>Asam</h3>
+          <p>Memberikan sentuhan rasa asam untuk menyeimbangkan gurih dan pedas.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">🌰</span>
           <h3>Kemiri</h3>
-          <p>Digoreng lalu digiling; membuat kuah lebih lembut dan mengilap.</p>
+          <p>Membantu menghasilkan rasa gurih sekaligus membuat bumbu terasa lebih pekat.</p>
         </div>
         <div class="bumbu reveal">
           <span class="emoji">⭐</span>
           <h3>Bungo Lawang</h3>
-          <p>Bunga lawang — rempah "penghangat" pada masakan berkuah pekat.</p>
+          <p>Memberikan aroma rempah yang hangat dan khas pada hidangan tertentu.</p>
         </div>
       </div>
     </section>
@@ -411,121 +381,117 @@ $produk_unggulan = $stmt->fetchAll();
     <section class="budaya" id="budaya">
       <div class="container">
         <div class="kepala kepala--terang reveal">
-          <p class="eyebrow">✦ Adat di Meja Makan ✦</p>
-          <h2>Santap ala <em>Urang Padang</em></h2>
+          <p class="eyebrow">✦ KENAPA BWAKEKOK? ✦</p>
+          <h2>Biar Makan Nggak <em>Bingung</em></h2>
           <p class="sub">
-            Makan di rumah makan Padang punya tata caranya sendiri — begini
-            adatnya.
+            Pilih menu favoritmu, temukan rasa yang kamu suka, lalu nikmati.
           </p>
         </div>
 
         <ol class="langkah-grid">
           <li class="langkah reveal">
             <span class="nomor">01</span>
-            <h3>Dabuih Datang</h3>
+            <h3>Banyak Pilihan</h3>
             <p>
-              Pelayan menghantarkan nasi dan semua lauk sekaligus ke meja.
-              Tugasmu hanya memilih yang menggoda.
+              Mau yang gurih, pedas, berkuah, atau berbumbu pekat? Pilih sesuai selera dari berbagai menu yang tersedia.
             </p>
           </li>
           <li class="langkah reveal">
             <span class="nomor">02</span>
-            <h3>Makan Pakai Tangan</h3>
+            <h3>Menu Mudah Dicari</h3>
             <p>
-              Adat menyarankan tangan kanan — nasi dan lauk terasa lebih
-              menyatu. Tenang, sendok tetap tersedia.
+              Semua pilihan makanan tersusun rapi, jadi kamu nggak perlu bingung menentukan mau makan apa hari ini.
             </p>
           </li>
           <li class="langkah reveal">
             <span class="nomor">03</span>
-            <h3>Hitung yang Disantap</h3>
+            <h3>Lihat Sebelum Pilih</h3>
             <p>
-              Yang dihitung hanya lauk yang tersentuh; sisanya kembali ke
-              pelayan. Prinsipnya berbagi, bukan berjaga.
+              Intip foto, nama, harga, dan deskripsi menu sebelum menentukan pilihanmu.
             </p>
           </li>
           <li class="langkah reveal">
             <span class="nomor">04</span>
-            <h3>Bungkus untuk Jalan</h3>
+            <h3>Tinggal Pilih & Nikmati</h3>
             <p>
-              Nasi bungkus berisi rendang adalah sahabat perjalanan para
-              perantau — awet dan mengenyangkan.
+              Sudah menemukan yang cocok? Langsung pilih menu favoritmu dan lanjutkan petualangan rasa di Waroeng Bwakekok.
             </p>
           </li>
         </ol>
 
         <p class="adat reveal">
-          “Lauk yang tidak tersentuh kembali ke dabuih — makan di Padang itu
-          soal <em>berbagi</em>, bukan berjaga.”
+          “Pilih lauknya, nikmati rasanya.”
         </p>
       </div>
     </section>
 
-    <!-- ===== FAKTA MENARIK ===== -->
-    <section class="fakta container" id="fakta">
+    <!-- ===== REVIEW PELANGGAN ===== -->
+    <section class="review container" id="review">
       <div class="kepala reveal">
-        <p class="eyebrow">✦ Tahukah Kamu? ✦</p>
-        <h2>Beberapa <em>Fakta Menarik</em></h2>
+        <p class="eyebrow">✦ Kata Mereka ✦</p>
+        <h2>Review <em>Pelanggan</em></h2>
+        <p class="sub">
+          Cerita kecil dari orang-orang yang sudah mencicipi meja kami.
+        </p>
       </div>
 
-      <div class="fakta-grid">
-        <article class="fakta-kartu reveal">
-          <span class="nomor">01</span>
-          <h3>Raja Dunia</h3>
-          <p>
-            Rendang dinobatkan CNN sebagai makanan terenak #1 versi pembaca pada
-            2011 — dan kembali ke puncak pada 2017.
-          </p>
-        </article>
-        <article class="fakta-kartu reveal">
-          <span class="nomor">02</span>
-          <h3>Ikut Merantau</h3>
-          <p>
-            Berkat budaya merantau urang Minang, masakan Padang menyebar ke
-            hampir setiap kota di Indonesia — dari Sabang sampai Merauke.
-          </p>
-        </article>
-        <article class="fakta-kartu reveal">
-          <span class="nomor">03</span>
-          <h3>Bekal Perjalanan</h3>
-          <p>
-            Rendang sengaja dimasak hingga kering agar awet berhari-hari tanpa
-            kulkas — bekal para perantau di jalanan dahulu kala.
-          </p>
-        </article>
-        <article class="fakta-kartu reveal">
-          <span class="nomor">04</span>
-          <h3>Wajah di Kapau</h3>
-          <p>
-            Di Nagari Kapau, lauk disajikan dalam gelas-gelas besar berjajar di
-            atas dabuih — versi paling meriah dari tradisi Padang.
-          </p>
-        </article>
-      </div>
+      <?php if (empty($review_list)): ?>
+        <p style="text-align:center;color:rgba(43,27,16,.55);font-style:italic;">
+          Belum ada review untuk ditampilkan.
+        </p>
+      <?php else: ?>
+        <div class="review-grid">
+          <?php foreach ($review_list as $r): ?>
+            <?php $r_rating = max(1, min(5, (int)$r['rating'])); ?>
+            <article class="review-card reveal">
+              <div class="review-head">
+                <span class="review-avatar" aria-hidden="true">
+                  <?= e(mb_strtoupper(mb_substr($r['nama'], 0, 1))) ?>
+                </span>
+                <div class="review-meta">
+                  <h4><?= e($r['nama']) ?></h4>
+                  <?php if (!empty($r['kota'])): ?>
+                    <span class="review-loc">📍 <?= e($r['kota']) ?></span>
+                  <?php endif; ?>
+                </div>
+              </div>
+
+              <div class="review-stars"
+                   aria-label="Rating <?= $r_rating ?> dari 5">
+                <?= str_repeat('★', $r_rating) . str_repeat('☆', 5 - $r_rating) ?>
+              </div>
+
+              <p class="review-text"><?= e($r['pesan']) ?></p>
+
+              <span class="review-date"><?= e(tanggal_relatif($r['dibuat_pada'])) ?></span>
+            </article>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
     </section>
 
     <!-- ===== PITA PENUTUP ===== -->
     <div class="pita pita--hijau pita--balik" aria-hidden="true">
       <div class="pita-track">
         <span class="seq">
-          <span>Rempah</span><i>✦</i><span>Santan</span><i>✦</i>
-          <span>Kesabaran</span><i>✦</i><span>Adat</span><i>✦</i>
-          <span>Cerita</span><i>✦</i><span>Raso nan Lamak</span><i>✦</i>
+          <span>WAROENG BWAKEKOK</span><i>✦</i><span>MAKAN ENAK</span><i>✦</i>
+          <span>PILIH LAUK</span><i>✦</i><span>BIKIN NAGIH</span><i>✦</i>
+          <span>SAMBAL PEDAS</span><i>✦</i><span>LAUK MELIMPAH</span><i>✦</i>
         </span>
         <span class="seq">
-          <span>Rempah</span><i>✦</i><span>Santan</span><i>✦</i>
-          <span>Kesabaran</span><i>✦</i><span>Adat</span><i>✦</i>
-          <span>Cerita</span><i>✦</i><span>Raso nan Lamak</span><i>✦</i>
+         <span>WAROENG BWAKEKOK</span><i>✦</i><span>MAKAN ENAK</span><i>✦</i>
+          <span>PILIH LAUK</span><i>✦</i><span>BIKIN NAGIH</span><i>✦</i>
+          <span>SAMBAL PEDAS</span><i>✦</i><span>LAUK MELIMPAH</span><i>✦</i>
         </span>
         <span class="seq">
-          <span>Rempah</span><i>✦</i><span>Santan</span><i>✦</i>
-          <span>Kesabaran</span><i>✦</i><span>Adat</span><i>✦</i>
-          <span>Cerita</span><i>✦</i><span>Raso nan Lamak</span><i>✦</i>
+          <span>WAROENG BWAKEKOK</span><i>✦</i><span>MAKAN ENAK</span><i>✦</i>
+          <span>PILIH LAUK</span><i>✦</i><span>BIKIN NAGIH</span><i>✦</i>
+          <span>SAMBAL PEDAS</span><i>✦</i><span>LAUK MELIMPAH</span><i>✦</i>
         </span>
         <span class="seq">
-          <span>Rempah</span><i>✦</i><span>Santan</span><i>✦</i>
-          <span>Kesabaran</span><i>✦</i><span>Adat</span><i>✦</i>
-          <span>Cerita</span><i>✦</i><span>Raso nan Lamak</span><i>✦</i>
+          <span>WAROENG BWAKEKOK</span><i>✦</i><span>MAKAN ENAK</span><i>✦</i>
+          <span>PILIH LAUK</span><i>✦</i><span>BIKIN NAGIH</span><i>✦</i>
+          <span>SAMBAL PEDAS</span><i>✦</i><span>LAUK MELIMPAH</span><i>✦</i>
         </span>
       </div>
     </div>
@@ -533,65 +499,116 @@ $produk_unggulan = $stmt->fetchAll();
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
       <div class="container footer-dalam">
-        <div class="gonjong-deret" aria-hidden="true">
-          <svg style="width: 34px" viewBox="0 0 48 36" fill="currentColor">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-          <svg style="width: 58px" viewBox="0 0 48 36" fill="currentColor">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-          <svg style="width: 80px" viewBox="0 0 48 36" fill="currentColor">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-          <svg style="width: 58px" viewBox="0 0 48 36" fill="currentColor">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-          <svg style="width: 34px" viewBox="0 0 48 36" fill="currentColor">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-        </div>
+          <div class="makanan-deret" aria-hidden="true">
 
-        <p class="wordmark">Padang</p>
+  <!-- 1. PIRING NASI -->
+  <svg viewBox="0 0 64 64" style="width: 40px;">
+    <!-- plate -->
+    <ellipse cx="32" cy="48" rx="26" ry="6" fill="currentColor" opacity=".55" />
+    <ellipse cx="32" cy="44" rx="22" ry="5" fill="currentColor" />
+    <!-- rice mound -->
+    <path d="M10 44 Q32 14 54 44 Q32 50 10 44 Z" fill="currentColor" />
+    <!-- rice texture -->
+    <path d="M22 38 Q32 34 42 38"
+          stroke="#221207" stroke-width="1.6" fill="none"
+          stroke-linecap="round" opacity=".35" />
+    <path d="M26 42 Q32 40 38 42"
+          stroke="#221207" stroke-width="1.6" fill="none"
+          stroke-linecap="round" opacity=".25" />
+  </svg>
+
+  <!-- 2. CABAI -->
+  <svg viewBox="0 0 64 64" style="width: 52px;">
+    <!-- stem -->
+    <path d="M28 10 L32 22"
+          stroke="currentColor" stroke-width="3.5"
+          stroke-linecap="round" fill="none" />
+    <path d="M28 10 Q22 8 18 12"
+          stroke="currentColor" stroke-width="3.5"
+          stroke-linecap="round" fill="none" />
+    <!-- body -->
+    <path d="M32 20 Q46 26 46 40 Q46 56 32 58 Q18 56 20 40 Q22 26 32 20 Z"
+          fill="currentColor" />
+    <!-- highlight -->
+    <path d="M27 30 Q25 40 27 50"
+          stroke="#221207" stroke-width="1.6" fill="none"
+          stroke-linecap="round" opacity=".35" />
+  </svg>
+
+  <!-- 3. MANGKUK GULAI (paling besar) -->
+  <svg viewBox="0 0 64 64" style="width: 72px;">
+    <!-- steam -->
+    <path d="M22 8 Q25 14 22 20"
+          stroke="currentColor" stroke-width="3"
+          stroke-linecap="round" fill="none" opacity=".55" />
+    <path d="M32 4 Q35 11 32 20"
+          stroke="currentColor" stroke-width="3"
+          stroke-linecap="round" fill="none" opacity=".55" />
+    <path d="M42 8 Q45 14 42 20"
+          stroke="currentColor" stroke-width="3"
+          stroke-linecap="round" fill="none" opacity=".55" />
+    <!-- bowl -->
+    <path d="M6 26 Q32 34 58 26 Q56 54 32 56 Q8 54 6 26 Z"
+          fill="currentColor" />
+    <!-- liquid line -->
+    <path d="M14 30 Q32 34 50 30"
+          stroke="#221207" stroke-width="1.8" fill="none"
+          stroke-linecap="round" opacity=".3" />
+  </svg>
+
+  <!-- 4. IKAN -->
+  <svg viewBox="0 0 64 64" style="width: 52px;">
+    <!-- tail -->
+    <path d="M10 32 L2 20 L2 44 Z" fill="currentColor" />
+    <!-- body -->
+    <ellipse cx="32" cy="32" rx="22" ry="12" fill="currentColor" />
+    <!-- top fin -->
+    <path d="M28 20 Q32 12 38 20 Z" fill="currentColor" />
+    <!-- bottom fin -->
+    <path d="M24 44 Q28 50 34 44 Z" fill="currentColor" />
+    <!-- eye -->
+    <circle cx="46" cy="30" r="2.5" fill="#221207" opacity=".65" />
+    <!-- scale lines -->
+    <path d="M24 27 Q26 32 24 37"
+          stroke="#221207" stroke-width="1.5" fill="none"
+          stroke-linecap="round" opacity=".3" />
+    <path d="M32 25 Q34 32 32 39"
+          stroke="#221207" stroke-width="1.5" fill="none"
+          stroke-linecap="round" opacity=".3" />
+  </svg>
+
+  <!-- 5. TELUR BALADO -->
+  <svg viewBox="0 0 64 64" style="width: 40px;">
+    <!-- sambal blob -->
+    <path d="M8 40 Q10 26 22 28 Q26 14 38 22 Q54 18 56 34 Q58 50 44 50 Q28 56 18 50 Q8 50 8 40 Z"
+          fill="currentColor" opacity=".55" />
+    <!-- egg -->
+    <ellipse cx="32" cy="36" rx="14" ry="16" fill="currentColor" />
+    <!-- highlight -->
+    <ellipse cx="26" cy="30" rx="4" ry="3" fill="#221207" opacity=".3" />
+    <!-- sambal flecks -->
+    <circle cx="14" cy="34" r="1.6" fill="#221207" opacity=".35" />
+    <circle cx="52" cy="38" r="1.6" fill="#221207" opacity=".35" />
+  </svg>
+
+</div>
+
+        <p class="wordmark">Bwakekok</p>
 
         <p class="tagline">
-          Sebuah pengenalan kecil atas masakan besar dari Ranah Minang.
+          Sebuah katalog hidangan Waroeng Bwakekok, dibuat untuk memudahkan pencarian menu favoritmu.
         </p>
 
-        <nav class="footer-nav">
+        <!-- <nav class="footer-nav">
           <a href="#tentang">Tentang</a>
           <a href="#hidangan">Hidangan</a>
           <a href="#rendang">Rendang</a>
           <a href="#rempah">Rempah</a>
           <a href="#budaya">Budaya</a>
-          <a href="#fakta">Fakta</a>
-        </nav>
+          <a href="#review">Review</a>
+        </nav> -->
 
-        <p class="hak">© 2026 Masakan Padang — dibuat dengan sepenuh hati ✦</p>
+        <p class="hak">© <?= date('Y') ?> Waroeng Bwakekok — dibuat dengan sepenuh hati ✦</p>
       </div>
     </footer>
 
@@ -600,21 +617,13 @@ $produk_unggulan = $stmt->fetchAll();
     <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
       <div class="sidebar-head">
         <span class="label">
-          <svg viewBox="0 0 48 36" fill="currentColor" aria-hidden="true">
-            <path
-              d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z"
-            />
-            <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-            <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-            <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-          </svg>
-          <span>Masakan<b>Padang</b></span>
+          <img src="assets/img/logo.png" alt="Waroeng Bwakekok" class="logo-mini" />
         </span>
         <button class="sidebar-close" aria-label="Tutup menu">✕</button>
       </div>
-      <a href="beranda.html" class="active">Home</a>
-      <a href="menu.html">Menu</a>
-      <a href="#">Review</a>
+      <a href="beranda.php" class="active">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="#review">Review</a>
     </aside>
 
     <script>

@@ -1,4 +1,8 @@
-/* ===== Reset & Variabel ===== */
+/* ==========================================================
+   DETAIL PRODUK — Waroeng Bwakekok
+   Gaya: majalah kuliner retro (krem, kunyit, daun pisang, sambal)
+   ========================================================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -13,20 +17,23 @@
   --muted: #8a7663;
   --line: #e5d9c1;
   --accent: #b33a26;
+  --accent-dark: #8f2c1b;
+  --green: #1f4d2b;
   --radius-lg: 28px;
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
   background-color: #f1e4cb;
 }
 
-/* Background 1: krem di belakang */
 body {
   background-color: #f1e4cb;
   color: var(--text);
   min-height: 100vh;
   padding: 30px;
+  overflow-x: hidden;
 }
 
 a {
@@ -51,14 +58,20 @@ a {
   padding: 20px 43px;
 }
 
+/* Logo foto */
 .logo {
-  font-size: 24px;
-  font-weight: 300;
-  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
 }
 
-.logo strong {
-  font-weight: 600;
+.logo img {
+  display: block;
+  height: 52px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -173,7 +186,7 @@ a {
 .price-current {
   font-size: 24px;
   font-weight: 500;
-  color: #1f4d2b;
+  color: var(--green);
 }
 
 .price-original {
@@ -287,9 +300,17 @@ a {
   border-top: 1px solid var(--line);
 }
 
-.footer-left h3 {
-  font-size: 21px;
-  font-weight: 400;
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.footer-logo-img {
+  display: block;
+  height: 42px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
 }
 
 .footer-center {
@@ -321,12 +342,13 @@ a {
   color: var(--accent);
 }
 
-/* ===== Tombol Aksi Halaman Detail ===== */
+/* ===== Tombol Aksi ===== */
 .product-info .action-row {
   display: flex !important;
   align-items: center;
   gap: 12px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .product-info .action-row .btn-primary {
@@ -462,7 +484,10 @@ a {
   flex-direction: column;
   gap: 6px;
   transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+  visibility: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1),
+    visibility 0s 0.35s;
   z-index: 100;
   box-shadow: -14px 0 40px rgba(43, 27, 16, 0.25);
   overflow-y: auto;
@@ -470,6 +495,10 @@ a {
 
 .sidebar.active {
   transform: translateX(0);
+  visibility: visible;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1),
+    visibility 0s 0s;
 }
 
 .sidebar-head {
@@ -483,19 +512,24 @@ a {
 }
 
 .sidebar-head .label {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
+  display: flex;
+  align-items: center;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
-.sidebar-head .label strong {
-  font-weight: 700;
-  color: #b33a26;
+.sidebar-head .label img {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
 }
 
 .sidebar-close {
   width: 38px;
   height: 38px;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -592,6 +626,11 @@ a {
     display: inline-flex;
   }
 
+  .logo img {
+    height: 42px;
+    max-width: 180px;
+  }
+
   .detail-section,
   .related-section {
     padding-left: 20px;
@@ -633,6 +672,11 @@ a {
 
   .footer-right {
     justify-content: center;
+  }
+
+  .sidebar-head .label img {
+    height: 36px;
+    max-width: 150px;
   }
 }
 
