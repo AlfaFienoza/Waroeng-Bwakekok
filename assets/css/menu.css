@@ -1,0 +1,783 @@
+/* =========================
+   RESET & VARIABEL
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --mint: #f1e4cb;
+  --text: #2b1b10;
+  --muted: #8a7663;
+  --gold: #b33a26;
+  --coral: #b33a26;
+  --coral-dark: #8f2c1b;
+  --coral-active: #b33a26;
+  --green: #1f4d2b;
+  --line: #e5d9c1;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #f1e4cb;
+}
+
+/* Background 1: krem di belakang */
+body {
+  background-color: #f1e4cb;
+  color: var(--text);
+  min-height: 100vh;
+  padding: 30px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* =========================
+   WEBSITE (card putih)
+========================= */
+
+.website {
+  width: 100%;
+  background-color: #fffcf5;
+  border-radius: 28px;
+  padding: 30px 43px 40px;
+  overflow: hidden;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 6px 0 24px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 300;
+}
+
+.logo strong {
+  font-weight: 600;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 52px;
+}
+
+.nav-menu a {
+  font-size: 17px;
+  transition: color 0.2s;
+}
+
+.nav-menu a:hover,
+.nav-menu .active {
+  color: var(--gold);
+}
+
+/* =========================
+   HEADER MENU
+========================= */
+
+.menu-header {
+  position: relative;
+  background-color: #f7efdf;
+  border-radius: 28px;
+  min-height: 252px;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 34px;
+}
+
+.menu-header h1 {
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 22px;
+}
+
+/* ---------- Filter kategori (desktop) ---------- */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 39px;
+}
+
+.categories a {
+  font-size: 17px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s;
+}
+
+.categories a:hover {
+  color: var(--coral-dark);
+}
+
+.categories .category-active {
+  border-bottom-color: var(--coral-active);
+}
+
+/* Hiasan di kanan header */
+.hiasan {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hiasan .leaf {
+  position: absolute;
+  top: 74px;
+  left: 20px;
+  width: 46px;
+}
+
+.hiasan .chili {
+  position: absolute;
+  top: 30px;
+  left: 100px;
+  font-size: 52px;
+  line-height: 1;
+}
+
+.hiasan .sprout {
+  position: absolute;
+  top: 162px;
+  left: 140px;
+  width: 38px;
+}
+
+/* =========================
+   JUDUL & SORT
+========================= */
+
+.menu-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 30px 20px 1px;
+}
+
+.menu-title h2 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7a6858;
+  font-size: 15px;
+}
+
+.sort select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 4px 34px 4px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  border: 1px solid #2b1b10;
+  border-radius: 14px;
+  background: #fffcf5
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%232B1B10' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  cursor: pointer;
+}
+
+/* =========================
+   KARTU MAKANAN
+========================= */
+
+.food-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 27px 33px;
+  margin: 0 -17px;
+  padding: 4px;
+}
+
+.food-card {
+  background: #fffcf5;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(43, 27, 16, 0.18);
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+.food-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(43, 27, 16, 0.22);
+}
+
+.food-card img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #f1e4cb;
+}
+
+.food-info {
+  padding: 14px 8px 8px;
+}
+
+.food-info h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2b1b10;
+  margin-bottom: 1px;
+}
+
+.food-info p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #7a6858;
+  line-height: 1.5;
+  min-height: 42px;
+}
+
+/* Harga */
+.harga {
+  color: var(--green);
+  font-weight: 700;
+  font-size: 16px;
+  margin: 6px 0 8px;
+}
+
+.harga s {
+  margin-left: 4px;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* Tombol & love */
+.card-bottom {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.card-bottom .btn-detail {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  margin-right: 32px;
+  border: none;
+  border-radius: 8px;
+  background: var(--coral);
+  color: #fffcf5;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.card-bottom .btn-detail:hover {
+  background: var(--coral-dark);
+}
+
+.love {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid #e5d9c1;
+  border-radius: 50%;
+  background: #fffcf5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  color: #2b1b10;
+  cursor: pointer;
+  margin-right: 8px;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.love:hover,
+.love.liked {
+  color: var(--coral-dark);
+  border-color: var(--coral);
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin: 60px 0 68px;
+}
+
+.pagination button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #2b1b10;
+  border-radius: 50%;
+  background: #fffcf5;
+  font-size: 16px;
+  color: #2b1b10;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination button:hover {
+  background: #f1e4cb;
+}
+
+.pagination .page {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pagination .page-active {
+  background: var(--coral-active);
+  color: #fffcf5;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 12px;
+}
+
+.footer-logo {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #7a6858;
+}
+
+.copyright small {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #8a7663;
+}
+
+.sosial {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.sosial a {
+  font-size: 20px;
+  color: #8a7663;
+  transition: color 0.2s;
+}
+
+.sosial a:hover {
+  color: var(--coral-dark);
+}
+
+/* =========================
+   HAMBURGER & SIDEBAR
+========================= */
+
+.nav-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hamburger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1.5px solid var(--text);
+  border-radius: 10px;
+  background: #fffcf5;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 3px 3px 0 var(--text);
+  transition:
+    transform 0.16s,
+    box-shadow 0.16s;
+}
+
+.hamburger:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--text);
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2.5px;
+  background: var(--text);
+  border-radius: 2px;
+  transition:
+    transform 0.25s,
+    opacity 0.25s;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* Overlay */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43, 27, 16, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 90;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100vh;
+  background: #f7efdf;
+  border-left: 1.5px solid var(--text);
+  padding: 22px 22px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+  z-index: 100;
+  box-shadow: -14px 0 40px rgba(43, 27, 16, 0.25);
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px dashed rgba(43, 27, 16, 0.3);
+}
+
+.sidebar-head .label {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sidebar-head .label strong {
+  font-weight: 700;
+  color: #b33a26;
+}
+
+.sidebar-close {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--text);
+  border-radius: 50%;
+  background: #fffcf5;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 3px 3px 0 var(--text);
+  transition:
+    transform 0.16s,
+    box-shadow 0.16s,
+    background 0.16s,
+    color 0.16s;
+}
+
+.sidebar-close:hover {
+  background: #b33a26;
+  color: #f7efdf;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--text);
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    color 0.18s,
+    transform 0.18s;
+}
+
+.sidebar a::after {
+  content: "→";
+  font-weight: 700;
+  opacity: 0.45;
+  transition:
+    transform 0.18s,
+    opacity 0.18s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: #b33a26;
+  color: #f7efdf;
+  border-color: var(--text);
+  transform: translateX(-3px);
+}
+
+.sidebar a:hover::after,
+.sidebar a.active::after {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1100px) {
+  .food-container {
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0;
+  }
+
+  .hiasan {
+    width: 220px;
+  }
+
+  .hiasan .chili {
+    left: 60px;
+  }
+
+  .hiasan .sprout {
+    left: 90px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hiasan {
+    display: none;
+  }
+}
+
+/* =========================
+   MOBILE (≤ 768px)
+========================= */
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: inline-flex;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .navbar {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* ---------- FILTER REDESIGN: pill chips ---------- */
+  .menu-header {
+    padding: 30px 22px 26px;
+    min-height: auto;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+    padding-bottom: 4px;
+  }
+
+  .categories a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    background: #fffcf5;
+    color: var(--text);
+    border: 1.5px solid #e5d9c1;
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 rgba(43, 27, 16, 0.08);
+    transition:
+      background 0.18s,
+      color 0.18s,
+      border-color 0.18s,
+      box-shadow 0.18s,
+      transform 0.18s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .categories a:hover {
+    color: var(--text);
+    background: #f7efdf;
+    border-color: #d9c8a6;
+  }
+
+  .categories a:active {
+    transform: scale(0.96);
+  }
+
+  .categories .category-active {
+    background: #b33a26;
+    color: #fffcf5;
+    border-color: #b33a26;
+    box-shadow: 2px 2px 0 rgba(43, 27, 16, 0.35);
+  }
+
+  .categories .category-active:hover {
+    background: #8f2c1b;
+    color: #fffcf5;
+    border-color: #8f2c1b;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 14px;
+  }
+
+  .website {
+    padding: 20px;
+  }
+
+  .menu-title {
+    margin-right: 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .menu-title h2 {
+    font-size: 24px;
+  }
+
+  .food-container {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 16px;
+  }
+
+  .sosial {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .categories a {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   ANIMASI
+========================= */
+
+.food-card {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   AKSESIBILITAS
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
