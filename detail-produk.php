@@ -218,7 +218,7 @@ $gambar_utama_url = gambar_produk($galeri[0]);
         </div>
         <div class="footer-center">
           <p>Waroeng Bwakekok — makan enak, gak pakai ribet.</p>
-          <p class="copyright">&copy; <?= date('Y') ?> Waroeng Bwakekok. All rights reserved.</p>
+          <p class="hak">© <?= date('Y') ?> Waroeng Bwakekok — dibuat dengan sepenuh hati</p>
         </div>
         <div class="footer-right">
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>

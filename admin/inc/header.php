@@ -10,7 +10,7 @@ $admin_nama  = $admin['nama_lengkap'] ?? $admin['username'] ?? 'Admin';
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><?= e($page_title) ?> — Admin Masakan Padang</title>
+  <title><?= e($page_title) ?> — Waroeng Bwakekok</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -23,14 +23,8 @@ $admin_nama  = $admin['nama_lengkap'] ?? $admin['username'] ?? 'Admin';
 <header class="topbar">
   <div class="topbar-dalam">
     <a class="brand" href="dashboard.php">
-      <svg viewBox="0 0 48 36" fill="currentColor" aria-hidden="true">
-        <path d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z" />
-        <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-        <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-        <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-      </svg>
-      <span>
-        Masakan<b>Padang</b>
+      <img src="../assets/img/logo.png" alt="Waroeng Bwakekok" class="brand-logo" />
+      <span class="brand-text">
         <small>Panel Admin</small>
       </span>
     </a>

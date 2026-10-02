@@ -34,7 +34,6 @@ require __DIR__ . '/inc/header.php';
 
 <div class="page-head">
   <div>
-    <p class="eyebrow">✦ Ringkasan ✦</p>
     <h1>Selamat datang, <em><?= e($admin['nama_lengkap'] ?: $admin['username']) ?></em></h1>
   </div>
   <a href="produk-tambah.php" class="btn btn--merah">+ Tambah Produk</a>
@@ -82,7 +81,7 @@ require __DIR__ . '/inc/header.php';
         <tbody>
           <?php foreach ($terbaru as $p): ?>
             <tr>
-              <td><img class="thumb" src="<?= e(gambar_produk($p['gambar_utama'])) ?>" alt="" /></td>
+              <td><img class="thumb" src="<?= e(gambar_produk_admin($p['gambar_utama'])) ?>" alt="" /></td>
               <td><strong><?= e($p['nama']) ?></strong></td>
               <td><?= e($p['kategori'] ?? '—') ?></td>
               <td><?= rupiah($p['harga']) ?></td>

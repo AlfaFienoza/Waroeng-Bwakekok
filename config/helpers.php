@@ -121,3 +121,19 @@ function tanggal_relatif(?string $datetime): string
     if ($diff < 31536000)   return floor($diff / 2592000) . ' bulan lalu';
     return floor($diff / 31536000) . ' tahun lalu';
 }
+
+/**
+ * Versi gambar_produk() khusus halaman admin (di dalam folder /admin/).
+ * Menambahkan prefix "../" supaya path relatif mengarah ke root project.
+ */
+function gambar_produk_admin(?string $path): string
+{
+    $path = trim((string)$path);
+    if ($path === '') {
+        return '../assets/img/placeholder.jpg';
+    }
+    if (preg_match('~^https?://~i', $path)) {
+        return $path;   // URL eksternal → langsung
+    }
+    return '../assets/img/produk/' . ltrim($path, '/');
+}

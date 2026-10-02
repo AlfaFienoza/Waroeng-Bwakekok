@@ -68,7 +68,7 @@ require __DIR__ . '/inc/header.php';
           <?php foreach ($daftar as $i => $p): ?>
             <tr>
               <td><?= $i + 1 ?></td>
-              <td><img class="thumb" src="<?= e(gambar_produk($p['gambar_utama'])) ?>" alt="" /></td>
+              <td><img class="thumb" src="<?= e(gambar_produk_admin($p['gambar_utama'])) ?>" alt="" /></td>
               <td>
                 <strong><?= e($p['nama']) ?></strong><br />
                 <small style="color: rgba(43,27,16,.55);"><?= e($p['slug']) ?></small>

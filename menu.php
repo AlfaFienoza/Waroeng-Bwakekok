@@ -248,7 +248,7 @@ function url_menu(int $page = 1, string $kategori = 'all'): string
         </a>
         <div class="copyright">
           <p>Waroeng Bwakekok — makan enak, gak pakai ribet.</p>
-          <small>&copy; <?= date('Y') ?> Waroeng Bwakekok. All rights reserved.</small>
+          <p class="hak">© <?= date('Y') ?> Waroeng Bwakekok — dibuat dengan sepenuh hati</p>
         </div>
         <div class="sosial">
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>

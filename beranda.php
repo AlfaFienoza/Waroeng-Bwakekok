@@ -147,9 +147,9 @@ $review_list = $pdo->query("
         </div>
 
         <span class="stiker stiker--satu" style="--r: 7deg"
-          >8 jam di atas api 🔥</span
+          >8+ Pilihan menu</span
         >
-        <span class="stiker stiker--dua" style="--r: -9deg">lado mudo 🌶️</span>
+        <span class="stiker stiker--dua" style="--r: -9deg">Rasa Nagih 🌶️</span>
       </div>
     </section>
 
@@ -162,7 +162,7 @@ $review_list = $pdo->query("
           alt="Suasana dapur sedang memasak"
         />
         <span class="stiker stiker--dapur" style="--r: 6deg"
-          >dapur niniak ✦</span
+          >Waroeng Bwakekok ✦</span
         >
         <img
           class="foto-kecil"

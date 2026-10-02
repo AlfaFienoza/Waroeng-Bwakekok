@@ -74,15 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="login-wrap">
   <div class="login-card">
     <div class="login-logo">
-      <svg viewBox="0 0 48 36" fill="currentColor" aria-hidden="true">
-        <path d="M4 30 C8 18 14 12 24 12 C34 12 40 18 44 30 L38 30 C35 22 30 18 24 18 C18 18 13 22 10 30 Z" />
-        <path d="M4 30 C2 20 6 10 14 6 C10 14 10 22 12 30 Z" />
-        <path d="M44 30 C46 20 42 10 34 6 C38 14 38 22 36 30 Z" />
-        <path d="M24 1 L27.5 8.5 L20.5 8.5 Z" />
-      </svg>
+      <img src="../assets/img/logo.png" alt="Waroeng Bwakekok" />
     </div>
     <h1>Panel <em>Admin</em></h1>
-    <p class="sub">Masuk untuk mengelola menu Masakan Padang.</p>
+    <p class="sub">Masuk untuk mengelola menu Waroeng Bwakekok.</p>
 
     <?php if ($err): ?>
       <div class="alert alert--err">✕ <?= e($err) ?></div>
